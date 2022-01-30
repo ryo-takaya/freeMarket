@@ -1,0 +1,10 @@
+{
+    "name": "ryo-takaya/free-market",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    },
+    "require": {}
+}

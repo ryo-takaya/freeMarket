@@ -1,0 +1,6 @@
+ssh.config
+mysql/data
+
+.DS_Store
+/vendor/
+.idea
