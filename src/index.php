@@ -10,7 +10,7 @@ use App\products\Test;
   <head>
     <meta charset="utf-8">
     <title>HOME</title>
-    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <link rel="stylesheet" type="text/css" href="./style/style.css" >
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
   </head>
 

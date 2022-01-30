@@ -7,3 +7,6 @@ if(!isset($url)){
     throw new RuntimeException('$_SERVER["REQUEST_URI"]が定義されていません');
 }
 
+$filePath = Route::resolveFile($url);
+
+require_once dirname(__DIR__,1). "/{$filePath}";
