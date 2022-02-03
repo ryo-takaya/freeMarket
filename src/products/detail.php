@@ -64,19 +64,5 @@
     </section>
 </div>
 
-<!-- footer -->
-<footer id="footer">
-    copyright hogehogeFotter
-</footer>
-
-<script src="js/vendor/jquery-2.2.2.min.js"></script>
-<script>
-    $(function(){
-        const $ftr = $('#footer');
-        if( window.innerHeight > $ftr.offset().top + $ftr.outerHeight() ){
-            $ftr.attr({'style': 'position:fixed; top:' + (window.innerHeight - $ftr.outerHeight()) +'px;' });
-        }
-    });
-</script>
 </body>
 </html>

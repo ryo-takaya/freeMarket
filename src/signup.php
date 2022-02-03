@@ -1,127 +1,49 @@
 <?php
 
-//ログを取るか
-ini_set('log_errors','on');
-//ログの出力ファイルを指定
-ini_set('error_log','php.log');
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 'on');
 
-//エラーメッセージを定数に設定
-define('MSG01','入力必須です');
-define('MSG02', 'Emailの形式で入力してください');
-define('MSG03','パスワード（再入力）が合っていません');
-define('MSG04','半角英数字のみご利用いただけます');
-define('MSG05','6文字以上で入力してください');
-define('MSG06','256文字以内で入力してください');
-
-//配列$err_msgを用意
-$err_msg = array();
-//dbアクセス結果用
-$dbRst = false;
-
-//バリデーション関数（未入力チェック）
-function validRequired($str, $err){
-  if(empty($str)){
-    $err = MSG01;
-  }
-}
-//バリデーション関数（未入力チェック）
-function validEmail($str, $err){
-  if(!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $str)){
-    $err = MSG02;
-  }
-}
-//バリデーション関数（同値チェック）
-function validMatch($str1, $str2, $err){
-  if($str1 !== $str2){
-    $err = MSG03;
-  }
-}
-//バリデーション関数（最小文字数チェック）
-function validMinLen($str, $min = 6, $err){
-  if(mb_strlen($str) < $min){
-    $err = MSG05;
-  }
-}
-//バリデーション関数（最大文字数チェック）
-function validMaxLen($str, $max = 256, $err){
-  if(mb_strlen($str) < $max){
-    $err = MSG06;
-  }
-}
-//バリデーション関数（半角チェック）
-function validHalf($str, $err){
-  if(!preg_match("/^[a-zA-Z0-9]+$/", $str)){
-    $err = MSG04;
-
-  }
-}
+use App\Parts\Util\Validation\SignUpValidation;
 
 //post送信されていた場合
-if(!empty($_POST)){
-  
-  //変数にユーザー情報を代入
-  $email = $_POST['email'];
-  $pass = $_POST['pass'];
-  $pass_re = $_POST['pass_retype'];
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+  $postData = $_POST;
+  $validation = new SignUpValidation($postData);
+  if ($validation->validate()) {
+      $errMessage = $validation->getErrorMessage();
+      var_dump($errMessage);
+  } else {
+      //DBへの接続準備
+//      $dsn = 'mysql:dbname=php_sample01;host=localhost;charset=utf8';
+//      $user = 'root';
+//      $password = 'root';
+//      $options = array(
+//          // SQL実行失敗時に例外をスロー
+//          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+//          // デフォルトフェッチモードを連想配列形式に設定
+//          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+//          // バッファードクエリを使う(一度に結果セットをすべて取得し、サーバー負荷を軽減)
+//          // SELECTで得た結果に対してもrowCountメソッドを使えるようにする
+//          PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+//      );
 
-  //未入力チェック
-  validRequired($email, $err_msg['email']);
-  validRequired($pass, $err_msg['pass']);
-  validRequired($pass_re, $err_msg['pass_retype']);
-  
-  //バリデーションエラーがない場合
-  if(empty($err_msg)){
+      // PDOオブジェクト生成（DBへ接続）
+      //$dbh = new PDO($dsn, $user, $password, $options);
 
-    //emailの形式チェック
-    validEmail($email, $err_msg['email']);
+      //SQL文（クエリー作成）
+      //$stmt = $dbh->prepare('INSERT INTO users (email,pass,login_time) VALUES (:email,:pass,:login_time)');
 
-    //パスワードとパスワード再入力が合っているかチェック
-    validMatch($pass, $pass_re, $err_msg['pass']);
-    
-    //バリデーションエラーがない場合
-    if(empty($err_msg)){
+      //プレースホルダに値をセットし、SQL文を実行
+      //$dbRst = $stmt->execute(array(':email' => $email, ':pass' => $pass, ':login_time' => date('Y-m-d H:i:s')));
 
-      //パスワードの半角英数字チェック
-      validHalf($pass, $err_msg['pass']);
-      //パスワードの最小文字数チェック
-      validMinLen($pass, $err_msg['pass']);
-      //パスワードの最大文字数チェック
-      validMaxLen($pass, $err_msg['pass']);
-      
-      //バリデーションエラーがない場合
-      if(empty($err_msg)){
-
-        //DBへの接続準備
-        $dsn = 'mysql:dbname=php_sample01;host=localhost;charset=utf8';
-        $user = 'root';
-        $password = 'root';
-        $options = array(
-          // SQL実行失敗時に例外をスロー
-          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-          // デフォルトフェッチモードを連想配列形式に設定
-          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-          // バッファードクエリを使う(一度に結果セットをすべて取得し、サーバー負荷を軽減)
-          // SELECTで得た結果に対してもrowCountメソッドを使えるようにする
-          PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
-        );
-
-        // PDOオブジェクト生成（DBへ接続）
-        $dbh = new PDO($dsn, $user, $password, $options);
-
-        //SQL文（クエリー作成）
-        $stmt = $dbh->prepare('INSERT INTO users (email,pass,login_time) VALUES (:email,:pass,:login_time)');
-
-        //プレースホルダに値をセットし、SQL文を実行
-        $dbRst = $stmt->execute(array(':email' => $email, ':pass' => $pass, ':login_time' => date('Y-m-d H:i:s')));
-        
-        //SQL実行結果が成功の場合
-        if($dbRst){
-          header("Location:mypage.html"); //マイページへ
-        }
-      }
-
-    }
+      //SQL実行結果が成功の場合
+//        if($dbRst){
+//          header("Location:mypage.html"); //マイページへ
+//        }
   }
+
+
+
 }
 
 ?>
@@ -130,8 +52,8 @@ if(!empty($_POST)){
 
   <head>
     <meta charset="utf-8">
-    <title>ユーザー登録 | WEBUKATU MARKET</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>ユーザー登録 MARKET</title>
+    <link rel="stylesheet" type="text/css" href="./style/style.css">
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
   </head>
 
@@ -158,12 +80,12 @@ if(!empty($_POST)){
 
         <div class="form-container">
 
-          <form action="mypage.php" class="form">
+          <form class="form" method="post">
             <h2 class="title">ユーザー登録</h2>
             <div class="area-msg">
              <?php 
-              if(!empty($err_msg)){
-                foreach($err_msg as $msg){
+              if(isset($errMessage)){
+                foreach($errMessage as $msg){
                   echo $msg.'<br>';
                 }
               }
@@ -179,7 +101,7 @@ if(!empty($_POST)){
             </label>
             <label>
               パスワード（再入力）
-              <input type="text" name="pass">
+              <input type="text" name="rePass">
             </label>
             <div class="btn-container">
               <input type="submit" class="btn btn-mid" value="登録する">

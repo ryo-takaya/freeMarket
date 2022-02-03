@@ -2,8 +2,9 @@
 
 class Route {
     private const ROUTE_MAP = [
-            ['path' => '/', 'file' => 'src/index.php'],
+        ['path' => '/', 'file' => 'src/index.php'],
         ['path' => '/login', 'file' => 'src/login.php'],
+        ['path' => '/signup', 'file' => 'src/signup.php']
 
     ];
 
