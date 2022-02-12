@@ -67,7 +67,6 @@ abstract class Validation{
     protected function validMaxLen(array $validateInfo){
         $result = [];
 
-        var_dump($validateInfo);
         foreach ($validateInfo as $info) {
             if(mb_strlen($info['value']) > $info['max']){
                 $result[$info['key']] = "{$info['max']}文字以内で入力してください";

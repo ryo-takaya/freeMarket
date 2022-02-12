@@ -4,16 +4,19 @@ CREATE TABLE IF NOT EXISTS users (
     username varchar(255) NOT NULL,
     email varchar(255) NOT NULL UNIQUE,
     password varchar(255) NOT NULL UNIQUE,
-    created datetime DEFAULT CURRENT_TIMESTAMP,
-    modified datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     age int(11),
     tel varchar(255) unique,
     zip int(11),
     address varchar(255),
+    login_time datetime DEFAULT CURRENT_TIMESTAMP,
+    created datetime DEFAULT CURRENT_TIMESTAMP,
+    modified datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
     INDEX index_username (username),
     INDEX index_email (email)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+insert into users (username, email, password ) values ('takaya', 'test@gootl.com', 'aaaaaaa');
 
 CREATE TABLE IF NOT EXISTS deleted_users (
     id int(11) UNSIGNED AUTO_INCREMENT,

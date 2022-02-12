@@ -4,31 +4,17 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 'on');
 
 use App\Parts\Util\Validation\SignUpValidation;
+use App\Parts\Model\Db\UsersTable;
 
-//post送信されていた場合
+$usersTable = new UsersTable($db);
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
   $postData = $_POST;
-  $validation = new SignUpValidation($postData);
+  $validation = new SignUpValidation($postData, $usersTable);
+
   if ($validation->validate()) {
       $errMessage = $validation->getErrorMessage();
-      var_dump($errMessage);
-  } else {
-      //DBへの接続準備
-//      $dsn = 'mysql:dbname=php_sample01;host=localhost;charset=utf8';
-//      $user = 'root';
-//      $password = 'root';
-//      $options = array(
-//          // SQL実行失敗時に例外をスロー
-//          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-//          // デフォルトフェッチモードを連想配列形式に設定
-//          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-//          // バッファードクエリを使う(一度に結果セットをすべて取得し、サーバー負荷を軽減)
-//          // SELECTで得た結果に対してもrowCountメソッドを使えるようにする
-//          PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
-//      );
 
-      // PDOオブジェクト生成（DBへ接続）
-      //$dbh = new PDO($dsn, $user, $password, $options);
+  } else {
 
       //SQL文（クエリー作成）
       //$stmt = $dbh->prepare('INSERT INTO users (email,pass,login_time) VALUES (:email,:pass,:login_time)');
@@ -58,7 +44,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
   </head>
 
   <body class="page-signup page-1colum">
-
     <!-- メニュー -->
     <header>
       <div class="site-width">
@@ -85,8 +70,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             <div class="area-msg">
              <?php 
               if(isset($errMessage)){
-                foreach($errMessage as $msg){
-                  echo $msg.'<br>';
+                foreach($errMessage as $arr){
+                  foreach ($arr as $msg){
+                      echo $msg. '</br></br>';
+                  }
                 }
               }
               ?>
