@@ -10,22 +10,20 @@ $usersTable = new UsersTable($db);
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
   $postData = $_POST;
   $validation = new SignUpValidation($postData, $usersTable);
-
   if ($validation->validate()) {
       $errMessage = $validation->getErrorMessage();
-
   } else {
-
-      //SQL文（クエリー作成）
-      //$stmt = $dbh->prepare('INSERT INTO users (email,pass,login_time) VALUES (:email,:pass,:login_time)');
-
-      //プレースホルダに値をセットし、SQL文を実行
-      //$dbRst = $stmt->execute(array(':email' => $email, ':pass' => $pass, ':login_time' => date('Y-m-d H:i:s')));
-
-      //SQL実行結果が成功の場合
-//        if($dbRst){
-//          header("Location:mypage.html"); //マイページへ
-//        }
+      $name = '名無しさん';
+      if(isset($postData['name']) && strlen($postData['name']) > 0){
+          $name = $postData['name'];
+      }
+          $stmt = $db->prepare('INSERT INTO users (username, email,password,login_time) VALUES (:username,:email,:pass,:login_time)');
+          $dbRst = $stmt->execute([':username'=>$name,':email' => $postData['email'], ':pass' => $postData['pass'], ':login_time' => date('Y-m-d H:i:s')]);
+      if ($dbRst) {
+          header("Location:mypage.html");
+      } else {
+          throw new Exception('ユーザーの作成に失敗しました');
+      }
   }
 
 

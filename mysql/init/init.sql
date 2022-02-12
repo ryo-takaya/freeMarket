@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     id int(11) UNSIGNED AUTO_INCREMENT,
     username varchar(255) NOT NULL,
     email varchar(255) NOT NULL UNIQUE,
-    password varchar(255) NOT NULL UNIQUE,
+    password varchar(255) NOT NULL,
     age int(11),
     tel varchar(255) unique,
     zip int(11),
