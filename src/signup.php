@@ -18,9 +18,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
           $name = $postData['name'];
       }
           $stmt = $db->prepare('INSERT INTO users (username, email,password,login_time) VALUES (:username,:email,:pass,:login_time)');
-          $dbRst = $stmt->execute([':username'=>$name,':email' => $postData['email'], ':pass' => $postData['pass'], ':login_time' => date('Y-m-d H:i:s')]);
+          $dbRst = $stmt->execute([':username'=>$name,':email' => $postData['email'], ':pass' => password_hash( $postData['pass'], PASSWORD_DEFAULT), ':login_time' => date('Y-m-d H:i:s')]);
       if ($dbRst) {
-          header("Location:mypage.html");
+          header("Location:mypage");
       } else {
           throw new Exception('ユーザーの作成に失敗しました');
       }
@@ -48,7 +48,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         <h1><a href="index.php"> MARKET</a></h1>
         <nav id="top-nav">
           <ul>
-            <li><a href="signup.html" class="btn btn-primary">ユーザー登録</a></li>
+            <li><a href="/signup" class="btn btn-primary">ユーザー登録</a></li>
             <li><a href="login.php">ログイン</a></li>
           </ul>
         </nav>
@@ -70,7 +70,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
               if(isset($errMessage)){
                 foreach($errMessage as $arr){
                   foreach ($arr as $msg){
-                      echo $msg. '</br></br>';
+                      echo $msg. '</br>';
                   }
                 }
               }
