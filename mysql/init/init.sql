@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS favorite_products(
     id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id int(11) UNSIGNED NOT NULL,
     product_id int(11) UNSIGNED NOT NULL,
+    delete_flg bool DEFAULT false,
     INDEX user_product(user_id, product_id),
     PRIMARY KEY(id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
