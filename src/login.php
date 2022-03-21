@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errMessage = $validation->getErrorMessage();
     } else {
         try {
-            $stmt = $db->prepare('SELECT id, password FROM users where email = :email ');
+            $stmt = $db->prepare('SELECT id, password FROM users where email = :email AND delete_flg = 0');
             $stmt->execute([':email' => $postData['email']]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!empty($result) && password_verify($postData['pass'], $result['password'])) {

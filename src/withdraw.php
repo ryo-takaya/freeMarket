@@ -3,6 +3,32 @@ use App\Parts\Util\Auth;
 
 Auth::startSession();
 Auth::loginFlow();
+
+$errFlg = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try{
+        $sql1 = 'UPDATE users SET delete_flg = 1 where user_id = :user_id';
+        $sql2 = 'UPDATE products SET delete_flg = 1 where user_id = :user_id';
+        $sql3 = 'UPDATE favorite_products SET delete_flg = 1 where user_id = :user_id';
+
+        $stmt = $db->prepare($sql1);
+        $result = $stmt->execute([':user_id' => $_SESSION['user_id']]);
+        $stmt = $db->prepare($sql2);
+        $stmt->execute([':user_id' => $_SESSION['user_id']]);
+        $stmt = $db->prepare($sql3);
+        $stmt->execute([':user_id' => $_SESSION['user_id']]);
+
+        if($result){
+            session_destroy();
+            header('Location:login');
+        }else{
+            $errFlg = true;
+        }
+
+    }catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +59,7 @@ Auth::loginFlow();
         <h1><a href="index.php">MARKET</a></h1>
         <nav id="top-nav">
           <ul>
-            <li><a href="">マイページ</a></li>
+            <li><a href="/mypage">マイページ</a></li>
             <li><a href="/logout">ログアウト</a></li>
           </ul>
         </nav>
@@ -45,14 +71,20 @@ Auth::loginFlow();
       <!-- Main -->
       <section id="main" >
         <div class="form-container">
-          <form action="" class="form">
+          <form action="" class="form" method="post">
             <h2 class="title">退会</h2>
+              <div class="area-msg">
+                  <?php
+
+                  echo $errFlg ? '退会に失敗しました': '';
+                  ?>
+              </div>
             <div class="btn-container">
-              <input type="submit" class="btn btn-mid" value="退会する">
+              <input type="submit" class="btn btn-mid" value="退会する" name="submit">
             </div>
           </form>
         </div>
-        <a href="mypage.php">&lt; マイページに戻る</a>
+        <a href="mypage">&lt; マイページに戻る</a>
       </section>
     </div>
 

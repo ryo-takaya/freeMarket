@@ -14,7 +14,7 @@ class UsersTable {
     }
 
     public function isUniqueEmail(string $email){
-        $sql = 'SELECT * FROM users WHERE email = :email';
+        $sql = 'SELECT * FROM users WHERE email = :email AND delete_flg = 0';
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue('email', $email);
         $stmt->execute();

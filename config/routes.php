@@ -7,6 +7,7 @@ class Route {
         ['path' => '/signup', 'file' => 'src/signup.php'],
         ['path' => '/mypage', 'file' => 'src/mypage.php'],
         ['path' => '/logout', 'file' => 'src/logout.php'],
+        ['path' => '/withdraw', 'file' => 'src/withdraw.php'],
 
     ];
 

@@ -3,6 +3,7 @@
 namespace App\Parts\Util;
 
 class Auth{
+    static public $REQUIRE_AUTH = ['/withdraw', '/mypage', '/user/edit'];
 
     static public function startSession()
     {
@@ -24,12 +25,12 @@ class Auth{
                 session_destroy();
                 header("Location:/login");
             }else {
-                if($_SERVER['REQUEST_URI'] !== '/mypage'){
-                    $_SESSION['login_date'] = time();
-                    header('Location:/mypage');
+                $_SESSION['login_date'] = time();
+                if (in_array($_SERVER['REQUEST_URI'], self::$REQUIRE_AUTH)) {
+                    return;
                 }
+                header('Location:/mypage');
             }
-
             return;
         }
 
