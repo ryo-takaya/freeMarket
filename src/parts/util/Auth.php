@@ -3,7 +3,7 @@
 namespace App\Parts\Util;
 
 class Auth{
-    static public $REQUIRE_AUTH = ['/withdraw', '/mypage', '/user/edit'];
+    static public $REQUIRE_AUTH = ['/withdraw', '/mypage', '/user/edit', '/passedit'];
 
     static public function startSession()
     {

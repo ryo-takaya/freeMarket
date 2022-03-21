@@ -18,7 +18,7 @@ if ($validation->validate()) {
         $user['user_name'] = $_POST['user_name'];
     }
 
-    $stmt = $db->prepare('UPDATE users SET user_name = :user_name WHERE user_id = :user_id');
+    $stmt = $db->prepare('UPDATE users SET user_name = :user_name WHERE id = :user_id');
     $result = $stmt->execute([':user_name' => $user['user_name'],':id' => $_SESSION['user_id']]);
     if(!$result){
         throw new Exception('更新に失敗しました');

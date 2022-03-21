@@ -1,9 +1,53 @@
 <?php
 use App\Parts\Util\Auth;
+use App\Parts\Model\Db\UsersTable;
+use App\Parts\Util\Validation\PassEditValidation;
 
 Auth::startSession();
 Auth::loginFlow();
+
+$usersTable = new UsersTable($db);
+$user = $usersTable->getUser($_SESSION['user_id']);
+$samePass = false;
+$sameNewOldPass = false;
+var_dump($user);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$validation = new PassEditValidation($_POST, $usersTable);
+if(!password_verify($user['password'], $_POST['old_pass'])){
+    var_dump(333);
+    $samePass = true;
+}
+    if($_POST['old_pass'] === $_POST['pass']){
+        $sameNewOldPass = true;
+    }
+
+if ($validation->validate() || $samePass || $sameNewOldPass) {
+    $errMessage = $validation->getErrorMessage();
+} else {
+    $stmt = $db->prepare('UPDATE users SET password = :password WHERE id = :user_id');
+    $result = $stmt->execute([':id' => $_SESSION['user_id']]);
+    if(!$result){
+        throw new Exception('更新に失敗しました');
+    } else{
+        var_dump('kjk');
+        $_SESSION['msg_success'] = 'パスワードの更新がうまくいきました';
+        $userName = $user['user_name'];
+        $from = 'test@example.com';
+        $to = $user['email'];
+        $sub = 'パスワード変更';
+        mb_language('Japanese');
+        mb_internal_encoding('UTF-8');
+
+        $result = mb_send_mail($to,$sub,'パスワード変更', "From: ". $from);
+        if(!$result){
+            throw new Exception('メールの送信に失敗しました');
+        }
+    }
+}
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -40,24 +84,31 @@ Auth::loginFlow();
       <!-- Main -->
       <section id="main" >
         <div class="form-container">
-          <form action="" class="form">
-           <div class="area-msg">
-             古いパスワードが正しくありません。<br>
-             新しいパスワードと新しいパスワード（再入力）が一致しません。<br>
-             新しいパスワードは半角英数字6文字以上で入力してください。<br>
-             パスワードが長すぎます。
-           </div>
+          <form action="" class="form" method="post">
+              <div class="area-msg">
+                  <?php
+                  if(isset($errMessage)){
+                      foreach($errMessage as $arr){
+                          foreach ($arr as $msg){
+                              echo $msg. '</br>';
+                          }
+                      }
+                  }
+                  echo $samePass && 'パスワードがあっていません';
+                  echo $sameNewOldPass && 'パスワードが同じです';
+                  ?>
+              </div>
             <label>
               古いパスワード
-              <input type="text" name="pass_old">
+              <input type="text" name="old_pass">
             </label>
             <label>
               新しいパスワード
-              <input type="text" name="pass_new">
+              <input type="text" name="pass">
             </label>
             <label>
               新しいパスワード（再入力）
-              <input type="text" name="pass_new_re">
+              <input type="text" name="rePass">
             </label>
             <div class="btn-container">
               <input type="submit" class="btn btn-mid" value="変更する">
