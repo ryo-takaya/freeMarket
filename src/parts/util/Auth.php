@@ -25,10 +25,11 @@ class Auth{
                 session_destroy();
                 header("Location:/login");
             }else {
-                $_SESSION['login_date'] = time();
-                header('Location:/mypage');
+                var_dump($_SERVER['PHP_SELF']);
+//                $_SESSION['login_date'] = time();
+//                header('Location:/mypage');
             }
         }
-        return false;
+
     }
 }
