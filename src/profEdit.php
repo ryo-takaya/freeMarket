@@ -1,8 +1,32 @@
 <?php
 use App\Parts\Util\Auth;
+use App\Parts\Util\Validation\UserProfEditValidation;
+use App\Parts\Model\Db\UsersTable;
 
 Auth::startSession();
 Auth::loginFlow();
+
+$usersTable = new UsersTable($db);
+$user = $usersTable->getUser($_SESSION['user_id']);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $validation = new UserProfEditValidation($_POST, $usersTable);
+if ($validation->validate()) {
+    $errMessage = $validation->getErrorMessage();
+} else {
+    if($_POST['user_name'] !== ''){
+        $user['user_name'] = $_POST['user_name'];
+    }
+
+    $stmt = $db->prepare('UPDATE users SET user_name = :user_name WHERE user_id = :user_id');
+    $result = $stmt->execute([':user_name' => $user['user_name'],':id' => $_SESSION['user_id']]);
+    if(!$result){
+        throw new Exception('更新に失敗しました');
+    }
+
+  }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -10,12 +34,8 @@ Auth::loginFlow();
   <head>
     <meta charset="utf-8">
     <title>プロフィール編集  MARKET</title>
-    <link rel="stylesheet" type="text/css" href="./style/style.css">
+      <link rel="stylesheet" type="text/css" href="./style/style.css">
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-
-    <style>
-      
-    </style>
 
   </head>
 
@@ -40,37 +60,23 @@ Auth::loginFlow();
       <!-- Main -->
       <section id="main" >
         <div class="form-container">
-          <form action="" class="form">
-            <div class="area-msg">
-              TELは半角数字10文字以上で入力してください。<br>
-              年齢は半角数字で入力してください。<br>
-              ◯◯が長すぎます。
-            </div>
+          <form action="" class="form" method="post">
+              <div class="area-msg">
+                  <?php
+                  if(isset($errMessage)){
+                      foreach($errMessage as $arr){
+                          foreach ($arr as $msg){
+                              echo $msg. '</br>';
+                          }
+                      }
+                  }
+                  ?>
+              </div>
            <label>
              名前
              <input type="text" name="username">
            </label>
-            <label>
-              TEL
-              <input type="text" name="tel">
-            </label>
-            <label>
-              郵便番号
-              <input type="text" name="zip">
-            </label>
-            <label>
-              住所
-              <input type="text" name="addr">
-            </label>
-            <label style="text-align:left;">
-             年齢
-              <input type="number" name="age">
-            </label>
-            <label>
-              Email
-              <input type="text" name="email">
-            </label>
-            
+
             <div class="btn-container">
               <input type="submit" class="btn btn-mid" value="変更する">
             </div>

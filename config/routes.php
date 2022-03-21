@@ -8,7 +8,7 @@ class Route {
         ['path' => '/mypage', 'file' => 'src/mypage.php'],
         ['path' => '/logout', 'file' => 'src/logout.php'],
         ['path' => '/withdraw', 'file' => 'src/withdraw.php'],
-
+        ['path' => '/user/edit', 'file' => 'src/profEdit.php'],
     ];
 
     /**
