@@ -1,3 +1,9 @@
+<?php
+use App\Parts\Util\Auth;
+
+Auth::startSession();
+Auth::loginFlow();
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -22,7 +28,7 @@
         <nav id="top-nav">
           <ul>
             <li><a href="mypage.php">マイページ</a></li>
-            <li><a href="">ログアウト</a></li>
+            <li><a href="/logout">ログアウト</a></li>
           </ul>
         </nav>
       </div>

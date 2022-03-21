@@ -5,7 +5,8 @@ class Route {
         ['path' => '/', 'file' => 'src/index.php'],
         ['path' => '/login', 'file' => 'src/login.php'],
         ['path' => '/signup', 'file' => 'src/signup.php'],
-        ['path' => '/mypage', 'file' => 'src/mypage.php']
+        ['path' => '/mypage', 'file' => 'src/mypage.php'],
+        ['path' => '/logout', 'file' => 'src/logout.php'],
 
     ];
 

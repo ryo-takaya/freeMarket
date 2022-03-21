@@ -37,4 +37,11 @@ class Auth{
             header('Location:/login');
         }
     }
+
+    static public function logout()
+    {
+        session_start();
+        session_destroy();
+        header("Location:/login");
+    }
 }
