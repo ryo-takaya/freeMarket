@@ -1,5 +1,8 @@
 <?php
+use App\Parts\Util\Auth;
 
+Auth::startSession();
+Auth::loginFlow();
 ?>
 
 <!DOCTYPE html>

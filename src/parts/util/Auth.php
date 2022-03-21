@@ -20,16 +20,21 @@ class Auth{
     static public function loginFlow()
     {
         if( !empty($_SESSION['login_date'])){
-
             if(($_SESSION['login_date'] + $_SESSION['login_limit']) < time()){
                 session_destroy();
                 header("Location:/login");
             }else {
-                var_dump($_SERVER['PHP_SELF']);
-//                $_SESSION['login_date'] = time();
-//                header('Location:/mypage');
+                if($_SERVER['REQUEST_URI'] !== '/mypage'){
+                    $_SESSION['login_date'] = time();
+                    header('Location:/mypage');
+                }
             }
+
+            return;
         }
 
+        if(!($_SERVER['REQUEST_URI'] === '/login')){
+            header('Location:/login');
+        }
     }
 }

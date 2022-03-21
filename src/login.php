@@ -7,6 +7,7 @@ use App\Parts\Model\Db\UsersTable;
 use App\Parts\Util\Auth;
 
 Auth::startSession();
+Auth::loginFlow();
 
 $usersTable = new UsersTable($db);
 $errorPasswordFlg = false;

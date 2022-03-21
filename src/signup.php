@@ -20,7 +20,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
           $stmt = $db->prepare('INSERT INTO users (username, email,password,login_time) VALUES (:username,:email,:pass,:login_time)');
           $dbRst = $stmt->execute([':username'=>$name,':email' => $postData['email'], ':pass' => password_hash( $postData['pass'], PASSWORD_DEFAULT), ':login_time' => date('Y-m-d H:i:s')]);
       if ($dbRst) {
-          header("Location:mypage");
+          header("Location:/login");
       } else {
           throw new Exception('ユーザーの作成に失敗しました');
       }
