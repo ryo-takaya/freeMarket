@@ -100,6 +100,30 @@ abstract class Validation{
         }
         return false;
     }
+
+    protected function validTel(array $validateKey){
+        $result = [];
+        if(!preg_match("/0\d{1,4}\d{1,4}\d{4}/", $this->data['tel'])){
+            $result[] = '電話番号の形式で入力してください';
+        }
+        $this->err_message['validTel'] = $result;
+    }
+
+    protected function validZip(array $validateKey){
+        $result = [];
+        if(!preg_match("/^\d{7}$/", $this->data['zip'])){
+            $result[] = '郵便番号の形式で入力してください';
+        }
+        $this->err_message['validZip'] = $result;
+    }
+
+    protected function validNumber(array $validateKey){
+        $result = [];
+        if(!preg_match("/^[0-9]+$/", $this->data['zip'])){
+            $result[] = '半角数字で入力してください';
+        }
+        $this->err_message['validNumber'] = $result;
+    }
     
     /**
      * @return  bool
