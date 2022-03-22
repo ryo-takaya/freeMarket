@@ -1,8 +1,33 @@
 <?php
 use App\Parts\Util\Auth;
+use App\Parts\Util\ImageUtil;
+use App\Parts\Model\Db\CategoriesTable;
 
 Auth::startSession();
 Auth::loginFlow();
+$categoryTable = new CategoriesTable($db);
+$categories = $categoryTable->getListCategories();
+$errFlg = false;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $pic1 = $_FILES['pic1']['name'] !== ''? ImageUtil::uploadImage($_FILES['pic1']):'';
+
+    $name = $_POST['name'];
+    $category_id = $_POST['category_id'];
+    $comment = $_POST['comment'];
+    $price = $_POST['price'];
+    var_dump($category_id);
+
+
+    $stmt = $db->prepare('INSERT products INTO(user_id, category_id, product_name, comment, price, pic1) VALUES(:user_id, :category_id, :comment, :price, :pic1)');
+    $result = $stmt->execute([':user_id' => $_SESSION['user_id'], ':category_id' => 1, ':comment' => $comment, ':price' => $price, ':pic1' => $pic1]);
+
+    if($result){
+        header('Location:/mypage');
+    } else {
+        $errFlg = true;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -35,11 +60,9 @@ Auth::loginFlow();
       <!-- Main -->
       <section id="main" >
         <div class="form-container">
-          <form action="mypage.php" class="form">
+          <form action="" class="form" method="post" enctype="multipart/form-data">
             <div class="area-msg">
-              金額には数字を入力してください<br>
-              商品名が長すぎます<br>
-              詳細は500文字までです
+              <?php echo $errFlg?'商品の投稿に失敗しました':'' ?>
             </div>
             <label>
               商品名
@@ -48,8 +71,9 @@ Auth::loginFlow();
             <label>
               カテゴリ
               <select name="category" id="">
-                <option value="1">スマホ</option>
-                <option value="2">自転車</option>
+                  <?php foreach ($categories as $category): ?>
+                      <option value=<?php echo $category['id']?>><?php echo $category['name'] ?></option>
+                  <?php endforeach; ?>
               </select>
             </label>
             <label>
@@ -65,20 +89,24 @@ Auth::loginFlow();
             </label>
             <label>
               画像１
+                <input type="file" name="pic1">
               <div class="area-drop">
-                ここに画像をドラッグ＆ドロップ
+
+
               </div>
             </label>
             <label>
               画像２
+                <input type="file" name="pic2">
               <div class="area-drop">
-                ここに画像をドラッグ＆ドロップ
+
               </div>
             </label>
             <label>
               画像３
+                <input type="file" name="pic3">
               <div class="area-drop">
-                ここに画像をドラッグ＆ドロップ
+
               </div>
             </label>
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Parts\Util\Auth;
 use App\Parts\Util\MailSender;
 use App\Parts\Util\Validation\PassRemindRecieveValidation;
 

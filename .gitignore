@@ -5,3 +5,4 @@ mysql/data
 /vendor/
 .idea
 .env
+webroot

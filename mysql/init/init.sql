@@ -29,6 +29,9 @@ CREATE TABLE IF NOT EXISTS categorys(
     PRIMARY KEY(id)
     ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
+insert into categorys (category_name ) values ('家電');
+insert into categorys (category_name ) values ('家具');
+
 CREATE TABLE IF NOT EXISTS products(
     id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id int(11) UNSIGNED NOT NULL,
@@ -36,6 +39,7 @@ CREATE TABLE IF NOT EXISTS products(
     product_name varchar(255) NOT NULL,
     comment varchar(255),
     price int(11) NOT NULL,
+    pic1 varchar(255),
     created datetime DEFAULT CURRENT_TIMESTAMP,
     modified datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     delete_flg bool DEFAULT false,

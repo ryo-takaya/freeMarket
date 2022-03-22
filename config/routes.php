@@ -12,6 +12,7 @@ class Route {
         ['path' => '/passedit', 'file' => 'src/passEdit.php'],
         ['path' => '/passremind', 'file' => 'src/passRemindSend.php'],
         ['path' => '/passremindrecieve', 'file' => 'src/passRemindRecieve.php'],
+        ['path' => '/registproduct', 'file' => 'src/registProduct.php'],
     ];
 
     /**
