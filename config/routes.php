@@ -10,6 +10,8 @@ class Route {
         ['path' => '/withdraw', 'file' => 'src/withdraw.php'],
         ['path' => '/user/edit', 'file' => 'src/profEdit.php'],
         ['path' => '/passedit', 'file' => 'src/passEdit.php'],
+        ['path' => '/passremind', 'file' => 'src/passRemindSend.php'],
+        ['path' => '/passremindrecieve', 'file' => 'src/passRemindRecieve.php'],
     ];
 
     /**

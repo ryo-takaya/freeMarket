@@ -10,12 +10,10 @@ $usersTable = new UsersTable($db);
 $user = $usersTable->getUser($_SESSION['user_id']);
 $samePass = false;
 $sameNewOldPass = false;
-var_dump($user);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $validation = new PassEditValidation($_POST, $usersTable);
 if(!password_verify($user['password'], $_POST['old_pass'])){
-    var_dump(333);
     $samePass = true;
 }
     if($_POST['old_pass'] === $_POST['pass']){
@@ -30,7 +28,6 @@ if ($validation->validate() || $samePass || $sameNewOldPass) {
     if(!$result){
         throw new Exception('更新に失敗しました');
     } else{
-        var_dump('kjk');
         $_SESSION['msg_success'] = 'パスワードの更新がうまくいきました';
         $userName = $user['user_name'];
         $from = 'test@example.com';
